@@ -119,7 +119,7 @@ class MelvorIdleGame(Game):
             GameObjectiveTemplate(
                 label="Complete DUNGEON NUMBER times",
                 data={
-                    "DUNGEON": (self.dungeons, 1)
+                    "DUNGEON": (self.dungeons, 1),
                     "NUMBER": (self.low_numbers, 1)
                 },
                 is_time_consuming=True,
