@@ -48,7 +48,7 @@ class MelvorIdleGame(Game):
             GameObjectiveTemplate(
                 label="Reach level LEVEL in SKILL",
                 data={
-                    "SKILL": (self.skills, 1),
+                    "SKILL": (self.base_skills, 1),
                     "LEVEL": (self.early_skill_levels, 1),
                 },
                 is_time_consuming=False,
@@ -64,6 +64,27 @@ class MelvorIdleGame(Game):
                 is_time_consuming=True,
                 is_difficult=False,
                 weight=2,
+            ),
+            
+            GameObjectiveTemplate(
+                label="Reach level LEVEL in SKILL",
+                data={
+                    "SKILL": (self.into_the_abyss_skills, 1),
+                    "LEVEL": (self.early_abyssal_levels, 1),
+                },
+                is_time_consuming=True,
+                is_difficult=False,
+                weight=2,
+            ),
+            GameObjectiveTemplate(
+                label="Reach level LEVEL in SKILL",
+                data={
+                    "SKILL": (self.into_the_abyss_skills, 1),
+                    "LEVEL": (self.late_abyssal_levels, 1),
+                },
+                is_time_consuming=True,
+                is_difficult=False,
+                weight=1,
             ),
             GameObjectiveTemplate(
                 label="Kill NUMBER MONSTER",
@@ -90,6 +111,25 @@ class MelvorIdleGame(Game):
                 data={
                     "MASTERY": (self.mastery, 1),
                     "SKILL": (self.non_combat_skills, 1),
+                },
+                is_time_consuming=True,
+                is_difficult=True,
+                weight=1,
+            ),
+            GameObjectiveTemplate(
+                label="Complete DUNGEON NUMBER times",
+                data={
+                    "DUNGEON": (self.dungeons, 1)
+                    "NUMBER": (self.low_numbers, 1)
+                },
+                is_time_consuming=True,
+                is_difficult=True,
+                weight=3,
+            ),
+            GameObjectiveTemplate(
+                label="Complete EVENT once",
+                data={
+                    "Event": (self.events, 1)
                 },
                 is_time_consuming=True,
                 is_difficult=True,
@@ -143,6 +183,18 @@ class MelvorIdleGame(Game):
     @property
     def late_skill_levels(self) -> List[int]:
         return self.levels[4:]
+
+    @functools.cached_property
+    def abyssal_levels(self) -> List[int]:
+        return [10, 20, 30, 40, 50, 60]
+
+    @property
+    def early_abyssal_levels(self) -> List[int]:
+        return self.abyssal_levels[:2]
+
+    @property
+    def late_abyssal_levels(self) -> List[int]:
+        return self.abyssal_levels[2:]
 
     @property
     def low_numbers(self) -> range:
@@ -228,7 +280,7 @@ class MelvorIdleGame(Game):
 
     @property
     def into_the_abyss_skills(self) -> List[str]:
-        return self.into_the_abyss_combat_skills + self.into_the_abyss_non_combat_skills
+        return self.into_the_abyss_combat_skills + self.into_the_abyss_non_combat_skills + self.base_skills
 
     @property
     def combat_skills(self) -> List[str]:
@@ -322,6 +374,108 @@ class MelvorIdleGame(Game):
         if self.has_dlc_into_the_abyss:
             boss_list.extend(self.into_the_abyss_bosses)
         return boss_list
+
+    @functools.cached_property
+    def base_dungeons(self) -> List[str]:
+        return [
+            "Chicken Coop",
+            "Undead Graveyard",
+            "Bandit Base",
+            "Hall of Wizards",
+            "Spider Forest",
+            "Miolite Caves",
+            "Deep Sea Ship",
+            "Frozen Cove",
+            "Dragons Den",
+            "Volcanic Cave",
+            "Infernal Stronghold",
+            "Air God Dungeon",
+            "Water God Dungeon",
+            "Earth God Dungeon",
+            "Fire God Dungeon",
+            "Stronghold of the Undead",
+            "Stronghold of Magic",
+            "Stronghold of Dragons",
+            "Stronghold of the Gods",
+        ]
+
+    @functools.cached_property
+    def atlas_of_discovery_dungeons(self) -> List[str]:
+        return [
+            "Golem Territory",
+            "Unholy Forest",
+            "Trickery Temple",
+            "Cult Grounds",
+            "Underwater City",
+        ]
+
+    @functools.cached_property
+    def throne_of_the_herald_dungeons(self) -> List[str]:
+        return [
+            "Ancient Sanctuary",
+            "Underground Lava Lake",
+            "Lightning Region",
+            "Lair of the Spider Queen",
+            "Cursed Forest",
+            "Necromancers Palace",
+        ]
+
+    @functools.cached_property
+    def into_the_abyss_dungeons(self) -> List[str]:
+        return [
+            "The Abyssal Approach",
+            "Into the Abyss",
+            "Depths of Woe",
+            "Depths of Decay",
+            "Depths of Fear",
+            "Depths of Ruin",
+            "Depths of Isolation",
+            "Depths of Dissolve",
+            "Depths of Resolve",
+            "Stronghold of Blight",
+            "Stronghold of Fear",
+            "Stronghold of Nightmares",
+            "Stronghold of the Overlords",
+        ]
+
+    @property
+    def dungeons(self) -> List[str]:
+        dungeon_list = self.base_dungeons[:]
+        if self.has_dlc_atlas_of_discovery:
+            dungeon_list.extend(self.atlas_of_discovery_dungeons)
+        if self.has_dlc_throne_of_the_herald:
+            dungeon_list.extend(self.throne_of_the_herald_dungeons)
+        if self.has_dlc_into_the_abyss:
+            dungeon_list.extend(self.into_the_abyss_dungeons)
+        return dungeon_list
+
+    @functools.cached_property
+    def base_events(self) -> List[str]:
+        return [
+            "Into the Mist",
+            "Impending Darkness Event",
+        ]
+
+    @functools.cached_property
+    def throne_of_the_herald_events(self) -> List[str]:
+        return [
+            "Throne of the Herald",
+        ]
+
+    @functools.cached_property
+    def into_the_abyss_events(self) -> List[str]:
+        return [
+            "The Final Depth",
+        ]
+
+    @property
+    def events(self) -> List[str]:
+        event_list = self.base_events[:]
+        if self.has_dlc_throne_of_the_herald:
+            event_list.extend(self.throne_of_the_herald_events)
+        if self.has_dlc_into_the_abyss:
+            event_list.extend(self.into_the_abyss_events)
+        return event_list
 
     @functools.cached_property
     def base_monsters(self) -> List[str]:
