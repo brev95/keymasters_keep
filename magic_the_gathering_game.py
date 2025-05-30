@@ -174,15 +174,15 @@ class MTGGame(Game):
 
     @property
     def large_amount(self) -> range:
-        return range(5, 40, 5)
+        return range(5, 41, 5)
 
     @property
     def medium_amount(self) -> range:
-        return range(5, 20, 5)
+        return range(5, 21, 5)
 
     @property
     def small_amount(self) -> range:
-        return range(1, 5)
+        return range(1, 6)
 
     @functools.cached_property
     def colors(self) -> List[str]:

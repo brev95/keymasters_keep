@@ -198,15 +198,15 @@ class MelvorIdleGame(Game):
 
     @property
     def low_numbers(self) -> range:
-        return range(5, 100, 5)
+        return range(5, 101, 5)
 
     @property
     def medium_numbers(self) -> range:
-        return range(50, 300, 10)
+        return range(50, 301, 10)
 
     @property
     def high_numbers(self) -> range:
-        return range(250, 1000, 50)
+        return range(250, 1001, 50)
 
     def random_range(self) -> range:
         rand = randint(0, 100)
@@ -218,7 +218,7 @@ class MelvorIdleGame(Game):
 
     @property
     def mastery(self) -> range:
-        return range(2, 99)
+        return range(2, 100)
 
     @functools.cached_property
     def base_combat_skills(self) -> List[str]:
