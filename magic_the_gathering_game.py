@@ -26,6 +26,7 @@ class MTGGame(Game):
     platforms_other = [
         KeymastersKeepGamePlatforms.AND,
         KeymastersKeepGamePlatforms.IOS,
+        KeymastersKeepGamePlatforms.CARD,
     ]
 
     is_adult_only_or_unrated = False
