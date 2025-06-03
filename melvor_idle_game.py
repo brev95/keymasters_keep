@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import functools
-
 from typing import List
 
 from dataclasses import dataclass
@@ -89,7 +87,7 @@ class MelvorIdleGame(Game):
             GameObjectiveTemplate(
                 label="Kill NUMBER MONSTER",
                 data={
-                    "NUMBER": (self.random_range(), 1),
+                    "NUMBER": (self.random_range, 1),
                     "MONSTER": (self.monsters, 1),
                 },
                 is_time_consuming=True,
@@ -99,7 +97,7 @@ class MelvorIdleGame(Game):
             GameObjectiveTemplate(
                 label="Kill NUMBER BOSS",
                 data={
-                    "NUMBER": (self.random_range(), 1),
+                    "NUMBER": (self.random_range, 1),
                     "BOSS": (self.bosses, 1),
                 },
                 is_time_consuming=True,
@@ -153,8 +151,8 @@ class MelvorIdleGame(Game):
     def has_dlc_into_the_abyss(self) -> bool:
         return "Into the Abyss" in self.dlc_owned
 
-    @functools.cached_property
-    def game_modes(self) -> List[str]:
+    @staticmethod
+    def game_modes() -> List[str]:
         return [
             "Normal",
             "Hardcore",
@@ -162,66 +160,61 @@ class MelvorIdleGame(Game):
             "Ancient Relics",
         ]
 
-    @functools.cached_property
-    def base_game_levels(self) -> List[int]:
+    @staticmethod
+    def base_game_levels() -> List[int]:
         return [10, 20, 30, 40, 50, 60, 70, 80, 90, 99]
 
-    @functools.cached_property
-    def dlc_levels(self) -> List[int]:
+    @staticmethod
+    def dlc_levels() -> List[int]:
         return [110, 120]
 
-    @property
     def levels(self) -> List[int]:
         if self.has_dlc_throne_of_the_herald:
-            return self.base_game_levels + self.dlc_levels
-        return self.base_game_levels
+            return self.base_game_levels() + self.dlc_levels()
+        return self.base_game_levels()
 
-    @property
     def early_skill_levels(self) -> List[int]:
-        return self.levels[:4]
+        return self.levels()[:4]
 
-    @property
     def late_skill_levels(self) -> List[int]:
-        return self.levels[4:]
+        return self.levels()[4:]
 
-    @functools.cached_property
-    def abyssal_levels(self) -> List[int]:
+    @staticmethod
+    def abyssal_levels() -> List[int]:
         return [10, 20, 30, 40, 50, 60]
 
-    @property
     def early_abyssal_levels(self) -> List[int]:
-        return self.abyssal_levels[:2]
+        return self.abyssal_levels()[:2]
 
-    @property
     def late_abyssal_levels(self) -> List[int]:
-        return self.abyssal_levels[2:]
+        return self.abyssal_levels()[2:]
 
-    @property
-    def low_numbers(self) -> range:
+    @staticmethod
+    def low_numbers() -> range:
         return range(5, 101, 5)
 
-    @property
-    def medium_numbers(self) -> range:
+    @staticmethod
+    def medium_numbers() -> range:
         return range(50, 301, 10)
 
-    @property
-    def high_numbers(self) -> range:
+    @staticmethod
+    def high_numbers() -> range:
         return range(250, 1001, 50)
 
     def random_range(self) -> range:
         rand = randint(0, 100)
         if rand > 75:
-            return self.low_numbers
+            return self.low_numbers()
         elif rand > 50:
-            return self.medium_numbers
-        return self.high_numbers
+            return self.medium_numbers()
+        return self.high_numbers()
 
-    @property
-    def mastery(self) -> range:
+    @staticmethod
+    def mastery() -> range:
         return range(2, 100)
 
-    @functools.cached_property
-    def base_combat_skills(self) -> List[str]:
+    @staticmethod
+    def base_combat_skills() -> List[str]:
         return [
             "Attack",
             "Defence",
@@ -233,8 +226,8 @@ class MelvorIdleGame(Game):
             "Strength",
         ]
 
-    @functools.cached_property
-    def base_non_combat_skills(self) -> List[str]:
+    @staticmethod
+    def base_non_combat_skills() -> List[str]:
         return [
             "Agility",
             "Astrology",
@@ -255,60 +248,55 @@ class MelvorIdleGame(Game):
             "Woodcutting",
         ]
 
-    @property
     def base_skills(self) -> List[str]:
-        return list(set(self.base_combat_skills + self.base_non_combat_skills))
+        return list(set(self.base_combat_skills() + self.base_non_combat_skills()))
 
-    @functools.cached_property
-    def atlas_of_discovery_skills(self) -> List[str]:
+    @staticmethod
+    def atlas_of_discovery_skills() -> List[str]:
         return [
             "Archaeology",
             "Cartography",
         ]
 
-    @functools.cached_property
-    def into_the_abyss_combat_skills(self) -> List[str]:
+    @staticmethod
+    def into_the_abyss_combat_skills() -> List[str]:
         return [
             "Corruption",
         ]
 
-    @functools.cached_property
-    def into_the_abyss_non_combat_skills(self) -> List[str]:
+    @staticmethod
+    def into_the_abyss_non_combat_skills() -> List[str]:
         return [
             "Harvesting",
         ]
 
-    @property
     def into_the_abyss_skills(self) -> List[str]:
-        return self.into_the_abyss_combat_skills + self.into_the_abyss_non_combat_skills + self.base_skills
+        return self.into_the_abyss_combat_skills() + self.into_the_abyss_non_combat_skills() + self.base_skills()
 
-    @property
     def combat_skills(self) -> List[str]:
-        skill_list = self.combat_skills[:]
+        skill_list = self.combat_skills()[:]
         if self.has_dlc_into_the_abyss:
-            skill_list.extend(self.into_the_abyss_combat_skills)
+            skill_list.extend(self.into_the_abyss_combat_skills())
         return skill_list
 
-    @property
     def non_combat_skills(self) -> List[str]:
-        skill_list = self.non_combat_skills[:]
+        skill_list = self.base_skills()[:]
         if self.has_dlc_atlas_of_discovery:
-            skill_list.extend(self.atlas_of_discovery_skills)
+            skill_list.extend(self.atlas_of_discovery_skills())
         if self.has_dlc_into_the_abyss:
-            skill_list.extend(self.into_the_abyss_non_combat_skills)
+            skill_list.extend(self.into_the_abyss_non_combat_skills())
         return skill_list
 
-    @property
     def skills(self) -> List[str]:
-        skill_list = self.base_skills[:]
+        skill_list = self.base_skills()[:]
         if self.has_dlc_atlas_of_discovery:
-            skill_list.extend(self.dlc_skills)
+            skill_list.extend(self.atlas_of_discovery_skills())
         if self.has_dlc_throne_of_the_herald:
-            skill_list.extend(self.into_the_herald_skills)
+            skill_list.extend(self.into_the_abyss_skills())
         return skill_list
 
-    @property
-    def base_game_bosses(self) -> List[str]:
+    @staticmethod
+    def base_game_bosses() -> List[str]:
         return [
             "Mumma Chicken",
             "Zombie Leader",
@@ -329,8 +317,8 @@ class MelvorIdleGame(Game):
             "Bane, Instrument of Fear",
         ]
 
-    @functools.cached_property
-    def altas_of_discovery_bosses(self) -> List[str]:
+    @staticmethod
+    def atlas_of_discovery_bosses() -> List[str]:
         return [
             "Lava Golem",
             "Furious Mahogany",
@@ -339,8 +327,8 @@ class MelvorIdleGame(Game):
             "Nagaia",
         ]
 
-    @functools.cached_property
-    def throne_of_the_herald_bosses(self) -> List[str]:
+    @staticmethod
+    def throne_of_the_herald_bosses() -> List[str]:
         return [
             "Morellia",
             "Trogark",
@@ -351,8 +339,8 @@ class MelvorIdleGame(Game):
             "The Herald",
         ]
 
-    @functools.cached_property
-    def into_the_abyss_bosses(self) -> List[str]:
+    @staticmethod
+    def into_the_abyss_bosses() -> List[str]:
         return [
             "Abyssara, the Abyssal Warden",
             "Felth, the Toxic Martyr",
@@ -364,19 +352,18 @@ class MelvorIdleGame(Game):
             "Xon, the Abussal King",
         ]
 
-    @property
     def bosses(self) -> List[str]:
-        boss_list = self.base_game_bosses[:]
+        boss_list = self.base_game_bosses()[:]
         if self.has_dlc_atlas_of_discovery:
-            boss_list.extend(self.altas_of_discovery_bosses)
+            boss_list.extend(self.altas_of_discovery_bosses())
         if self.has_dlc_throne_of_the_herald:
-            boss_list.extend(self.throne_of_the_herald_bosses)
+            boss_list.extend(self.throne_of_the_herald_bosses())
         if self.has_dlc_into_the_abyss:
-            boss_list.extend(self.into_the_abyss_bosses)
+            boss_list.extend(self.into_the_abyss_bosses())
         return boss_list
 
-    @functools.cached_property
-    def base_dungeons(self) -> List[str]:
+    @staticmethod
+    def base_dungeons() -> List[str]:
         return [
             "Chicken Coop",
             "Undead Graveyard",
@@ -399,8 +386,8 @@ class MelvorIdleGame(Game):
             "Stronghold of the Gods",
         ]
 
-    @functools.cached_property
-    def atlas_of_discovery_dungeons(self) -> List[str]:
+    @staticmethod
+    def atlas_of_discovery_dungeons() -> List[str]:
         return [
             "Golem Territory",
             "Unholy Forest",
@@ -409,8 +396,8 @@ class MelvorIdleGame(Game):
             "Underwater City",
         ]
 
-    @functools.cached_property
-    def throne_of_the_herald_dungeons(self) -> List[str]:
+    @staticmethod
+    def throne_of_the_herald_dungeons() -> List[str]:
         return [
             "Ancient Sanctuary",
             "Underground Lava Lake",
@@ -420,8 +407,8 @@ class MelvorIdleGame(Game):
             "Necromancers Palace",
         ]
 
-    @functools.cached_property
-    def into_the_abyss_dungeons(self) -> List[str]:
+    @staticmethod
+    def into_the_abyss_dungeons() -> List[str]:
         return [
             "The Abyssal Approach",
             "Into the Abyss",
@@ -438,47 +425,45 @@ class MelvorIdleGame(Game):
             "Stronghold of the Overlords",
         ]
 
-    @property
     def dungeons(self) -> List[str]:
-        dungeon_list = self.base_dungeons[:]
+        dungeon_list = self.base_dungeons()[:]
         if self.has_dlc_atlas_of_discovery:
-            dungeon_list.extend(self.atlas_of_discovery_dungeons)
+            dungeon_list.extend(self.atlas_of_discovery_dungeons())
         if self.has_dlc_throne_of_the_herald:
-            dungeon_list.extend(self.throne_of_the_herald_dungeons)
+            dungeon_list.extend(self.throne_of_the_herald_dungeons())
         if self.has_dlc_into_the_abyss:
-            dungeon_list.extend(self.into_the_abyss_dungeons)
+            dungeon_list.extend(self.into_the_abyss_dungeons())
         return dungeon_list
 
-    @functools.cached_property
-    def base_events(self) -> List[str]:
+    @staticmethod
+    def base_events() -> List[str]:
         return [
             "Into the Mist",
             "Impending Darkness Event",
         ]
 
-    @functools.cached_property
-    def throne_of_the_herald_events(self) -> List[str]:
+    @staticmethod
+    def throne_of_the_herald_events() -> List[str]:
         return [
             "Throne of the Herald",
         ]
 
-    @functools.cached_property
-    def into_the_abyss_events(self) -> List[str]:
+    @staticmethod
+    def into_the_abyss_events() -> List[str]:
         return [
             "The Final Depth",
         ]
 
-    @property
     def events(self) -> List[str]:
-        event_list = self.base_events[:]
+        event_list = self.base_events()[:]
         if self.has_dlc_throne_of_the_herald:
-            event_list.extend(self.throne_of_the_herald_events)
+            event_list.extend(self.throne_of_the_herald_events())
         if self.has_dlc_into_the_abyss:
-            event_list.extend(self.into_the_abyss_events)
+            event_list.extend(self.into_the_abyss_events())
         return event_list
 
-    @functools.cached_property
-    def base_monsters(self) -> List[str]:
+    @staticmethod
+    def base_monsters() -> List[str]:
         return [
             "Adamant Knight",
             "Adult Farmer",
@@ -651,8 +636,8 @@ class MelvorIdleGame(Game):
             "Zombie",
         ]
 
-    @functools.cached_property
-    def atlas_of_discovery_monsters(self) -> List[str]:
+    @staticmethod
+    def atlas_of_discovery_monsters() -> List[str]:
         return [
             "Angry Teak",
             "Blind Archer",
@@ -699,8 +684,8 @@ class MelvorIdleGame(Game):
             "Tree Spirit",
         ]
 
-    @functools.cached_property
-    def throne_of_the_herald_monsters(self) -> List[str]:
+    @staticmethod
+    def throne_of_the_herald_monsters() -> List[str]:
         return [
             "Alraune",
             "Arctair",
@@ -763,8 +748,8 @@ class MelvorIdleGame(Game):
             "Wicked Spider",
         ]
 
-    @functools.cached_property
-    def into_the_abyss_monsters(self) -> List[str]:
+    @staticmethod
+    def into_the_abyss_monsters() -> List[str]:
         return [
             "Abyssal Bat",
             "Abyssal Chicken",
@@ -866,15 +851,14 @@ class MelvorIdleGame(Game):
             "Za-Kul, the Tendril Nightmare",
         ]
 
-    @property
     def monsters(self) -> List[str]:
-        monster_list = self.base_monsters[:]
+        monster_list = self.base_monsters()[:]
         if self.has_dlc_atlas_of_discovery:
-            monster_list.extend(self.atlas_of_discovery_monsters)
+            monster_list.extend(self.atlas_of_discovery_monsters())
         if self.has_dlc_throne_of_the_herald:
-            monster_list.extend(self.throne_of_the_herald_monsters)
+            monster_list.extend(self.throne_of_the_herald_monsters())
         if self.has_dlc_into_the_abyss:
-            monster_list.extend(self.into_the_abyss_monsters)
+            monster_list.extend(self.into_the_abyss_monsters())
         return monster_list
 
 

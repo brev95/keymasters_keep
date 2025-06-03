@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import functools
-
 from typing import List
 
 from dataclasses import dataclass
@@ -97,35 +95,35 @@ class WingspanGame(Game):
         ]
 
     @property
-    def expansions_owned(self):
-        return sorted(self.archipelago_options.wingspan_expansions_owned.values)
+    def expansions_owned(self) -> List[str]:
+        return sorted(self.archipelago_options.wingspan_expansions_owned.value)
 
     @property
-    def has_asia_expansion(self):
-        return "Asia" in self.dlc_owned
+    def has_asia_expansion(self) -> bool:
+        return "Asia" in self.expansions_owned
 
     @property
-    def has_european_expansion(self):
-        return "European" in self.dlc_owned
+    def has_european_expansion(self) -> bool:
+        return "European" in self.expansions_owned
 
     @property
-    def has_oceania_expansion(self):
-        return "Oceania" in self.dlc_owned
+    def has_oceania_expansion(self) -> bool:
+        return "Oceania" in self.expansions_owned
 
-    @property
-    def board_columns(self) -> range:
+    @staticmethod
+    def board_columns() -> range:
         return range(1, 6)
 
-    @property
-    def food_range(self) -> range:
+    @staticmethod
+    def food_range() -> range:
         return range(3, 7)
 
-    @property
-    def bonus_range(self) -> range:
+    @staticmethod
+    def bonus_range() -> range:
         return range(1, 7)
 
-    @functools.cached_property
-    def base_food_types(self) -> List[str]:
+    @staticmethod
+    def base_food_types() -> List[str]:
         return [
             "invertebrate",
             "seed",
@@ -134,29 +132,28 @@ class WingspanGame(Game):
             "rodent",
         ]
 
-    @functools.cached_property
-    def oceania_food_types(self) -> List[str]:
+    @staticmethod
+    def oceania_food_types() -> List[str]:
         return [
             "nectar",
         ]
 
-    @property
     def food_types(self) -> List[str]:
-        food = self.base_food_types[:]
+        food = self.base_food_types()[:]
         if self.has_oceania_expansion:
-            food.extend(self.oceania_food_types)
+            food.extend(self.oceania_food_types())
         return food
 
-    @functools.cached_property
-    def habitats(self) -> List[str]:
+    @staticmethod
+    def habitats() -> List[str]:
         return [
             "forest",
             "grassland",
             "wetland",
         ]
 
-    @functools.cached_property
-    def nest_types(self) -> List[str]:
+    @staticmethod
+    def nest_types() -> List[str]:
         return [
             "bowl",
             "cavity",
@@ -165,16 +162,15 @@ class WingspanGame(Game):
             "wild"
         ]
 
-    @property
     def end_of_round_goals(self) -> List[str]:
         return [
-            f"Most birds with {nest_type} nest type with an egg" for nest_type in self.nest_types
+            f"Most birds with {nest_type} nest type with an egg" for nest_type in self.nest_types()
         ] + [
-            f"Most birds in {habitat}" for habitat in self.habitats
+            f"Most birds in {habitat}" for habitat in self.habitats()
         ] + [
-            f"Most eggs in {nest_type}" for nest_type in self.nest_types
+            f"Most eggs in {nest_type}" for nest_type in self.nest_types()
         ] + [
-            f"Most eggs in {habitat}" for habitat in self.habitats
+            f"Most eggs in {habitat}" for habitat in self.habitats()
         ] + [
             f"Most birds with a beak pointing {direction}" for direction in ["left", "right"]
         ] + [
@@ -199,8 +195,8 @@ class WingspanGame(Game):
             "Most food cost on birds",
         ]
 
-    @property
-    def game_end_points(self) -> List[str]:
+    @staticmethod
+    def game_end_points() -> List[str]:
         return [
             "most points from birds",
             "most points from bonus cards",
@@ -210,7 +206,6 @@ class WingspanGame(Game):
             "most tucked cards",
         ]
 
-    @functools.cached_property
     def bonus_objectives(self) -> List[str]:
         return [
             "Birds with colors in their names",
@@ -235,9 +230,9 @@ class WingspanGame(Game):
             "Fish and rodent tokens cached on birds",
             "Birds that allow you to score or draw more bonus cards",
         ] + [
-            f"Different nest types in {habitat}" for habitat in self.habitats
+            f"Different nest types in {habitat}" for habitat in self.habitats()
         ] + [
-            f"Consecutive birds in {habitat} with ascending or descending scores" for habitat in self.habitats
+            f"Consecutive birds in {habitat} with ascending or descending scores" for habitat in self.habitats()
         ]
 
 

@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import functools
-
 from typing import List
 
 from dataclasses import dataclass
@@ -167,16 +165,16 @@ class PokemonGoGame(Game):
             ),
         ]
 
-    @property
-    def catches(self) -> range:
+    @staticmethod
+    def catches() -> range:
         return range(5, 31, 5)
     
-    @property
-    def low_range(self) -> range:
+    @staticmethod
+    def low_range() -> range:
         return range(1, 6)
 
-    @functools.cached_property
-    def pokemon_types(self) -> List[str]:
+    @staticmethod
+    def pokemon_types() -> List[str]:
         return [
             "Bug",
             "Dark",
@@ -198,8 +196,8 @@ class PokemonGoGame(Game):
             "Water",
         ]
 
-    @functools.cached_property
-    def throw_types(self) -> List[str]:
+    @staticmethod
+    def throw_types() -> List[str]:
         return [
             "Nice",
             "Great",

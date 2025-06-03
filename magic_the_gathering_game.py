@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import functools
-
 from typing import List
 
 from dataclasses import dataclass
@@ -172,20 +170,20 @@ class MTGGame(Game):
             ),
         ]
 
-    @property
-    def large_amount(self) -> range:
+    @staticmethod
+    def large_amount() -> range:
         return range(5, 41, 5)
 
-    @property
-    def medium_amount(self) -> range:
+    @staticmethod
+    def medium_amount() -> range:
         return range(5, 21, 5)
 
-    @property
-    def small_amount(self) -> range:
+    @staticmethod
+    def small_amount() -> range:
         return range(1, 6)
 
-    @functools.cached_property
-    def colors(self) -> List[str]:
+    @staticmethod
+    def colors() -> List[str]:
         return [
             "White",
             "Blue",
@@ -195,8 +193,8 @@ class MTGGame(Game):
             "Colorless",
         ]
 
-    @functools.cached_property
-    def card_types(self) -> List[str]:
+    @staticmethod
+    def card_types() -> List[str]:
         return [
             "Artifact",
             "Battle",
@@ -208,17 +206,17 @@ class MTGGame(Game):
             "Sorcery",
         ]
 
-    @functools.cached_property
-    def land(self) -> List[str]:
+    @staticmethod
+    def land() -> List[str]:
         return [
             "Land"
         ]
 
     def all_types(self) -> List[str]:
-        return self.card_types + self.land
+        return self.card_types() + self.land()
 
-    @functools.cached_property
-    def common_creature_types(self) -> List[str]:
+    @staticmethod
+    def common_creature_types() -> List[str]:
         return [
             "Angel",
             "Beast",
@@ -254,8 +252,8 @@ class MTGGame(Game):
             "Zombie",
         ]
 
-    @functools.cached_property
-    def rare_creature_types(self) -> List[str]:
+    @staticmethod
+    def rare_creature_types() -> List[str]:
         return [
             "Advisor",
             "Aetherborn",
@@ -527,12 +525,11 @@ class MTGGame(Game):
             "Zubera",
         ]
 
-    @property
     def creature_types(self) -> List[str]:
-        return self.common_creature_types + self.rare_creature_types
+        return self.common_creature_types() + self.rare_creature_types()
 
-    @functools.cached_property
-    def artifact_types(self) -> List[str]:
+    @staticmethod
+    def artifact_types() -> List[str]:
         return [
             "Blood",
             "Clue",
@@ -546,8 +543,8 @@ class MTGGame(Game):
             "Vehicle",
         ]
 
-    @functools.cached_property
-    def enchantment_types(self) -> List[str]:
+    @staticmethod
+    def enchantment_types() -> List[str]:
         return [
             "Aura",
             "Background",
@@ -562,8 +559,8 @@ class MTGGame(Game):
             "Shrine",
         ]
 
-    @functools.cached_property
-    def basic_land_types(self) -> List[str]:
+    @staticmethod
+    def basic_land_types() -> List[str]:
         return [
             "Plains",
             "Island",
@@ -572,8 +569,8 @@ class MTGGame(Game):
             "Forest",
         ]
 
-    @functools.cached_property
-    def land_types(self) -> List[str]:
+    @staticmethod
+    def land_types() -> List[str]:
         return [
             "Cave",
             "Desert",
@@ -587,16 +584,14 @@ class MTGGame(Game):
             "Urza's",
         ]
 
-    @property
     def all_land_types(self) -> List[str]:
-        return self.basic_land_types + self.land_types
+        return self.basic_land_types() + self.land_types()
 
-    @property
     def all_sub_types(self) -> List[str]:
-        return self.creature_types + self.artifact_types + self.enchantment_types
+        return self.creature_types() + self.artifact_types() + self.enchantment_types()
 
-    @functools.cached_property
-    def alternative_win_types(self) -> List[str]:
+    @staticmethod
+    def alternative_win_types() -> List[str]:
         return [
             "Life Loss",
             "Mill",
@@ -604,8 +599,8 @@ class MTGGame(Game):
             "Commander Damage",
         ]
 
-    @functools.cached_property
-    def alternative_win_cards(self) -> List[str]:
+    @staticmethod
+    def alternative_win_cards() -> List[str]:
         return [
             "Approach of the Second Sun",
             "Azor's Elocutors",
@@ -644,8 +639,8 @@ class MTGGame(Game):
             "Zenos yae Galvus // Shinryu, Transcendent Rival",
         ]
 
-    @functools.cached_property
-    def acorn_win_conditions(self) -> List[str]:
+    @staticmethod
+    def acorn_win_conditions() -> List[str]:
         return [
             "As Luck Would Have It",
             "Form of the Approach of the Second Sun",
@@ -653,12 +648,11 @@ class MTGGame(Game):
             "The Cheese Stands Alone",
         ]
 
-    @property
     def alternative_win_conditions(self) -> List[str]:
-        return self.alternative_win_types + self.alternative_win_cards
+        return self.alternative_win_types() + self.alternative_win_cards()
 
-    @functools.cached_property
-    def bad_cards(self) -> List[str]:
+    @staticmethod
+    def bad_cards() -> List[str]:
         return [
             "Alabaster Leech",
             "Apocalypse Chime",
