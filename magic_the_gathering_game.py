@@ -19,12 +19,12 @@ class MTGArchipelagoOptions:
 
 class MTGGame(Game):
     name = "Magic the Gathering"
-    platform = KeymastersKeepGamePlatforms.PC
+    platform = KeymastersKeepGamePlatforms.CARD,
 
     platforms_other = [
+        KeymastersKeepGamePlatforms.PC,
         KeymastersKeepGamePlatforms.AND,
         KeymastersKeepGamePlatforms.IOS,
-        KeymastersKeepGamePlatforms.CARD,
     ]
 
     is_adult_only_or_unrated = False
