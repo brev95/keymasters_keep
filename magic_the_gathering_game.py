@@ -19,7 +19,7 @@ class MTGArchipelagoOptions:
 
 class MTGGame(Game):
     name = "Magic the Gathering"
-    platform = KeymastersKeepGamePlatforms.CARD,
+    platform = KeymastersKeepGamePlatforms.CARD
 
     platforms_other = [
         KeymastersKeepGamePlatforms.PC,
