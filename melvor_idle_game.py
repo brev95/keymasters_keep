@@ -128,7 +128,7 @@ class MelvorIdleGame(Game):
             GameObjectiveTemplate(
                 label="Complete EVENT once",
                 data={
-                    "Event": (self.events, 1)
+                    "EVENT": (self.events, 1)
                 },
                 is_time_consuming=True,
                 is_difficult=True,
