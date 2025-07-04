@@ -42,6 +42,28 @@ class MelvorIdleGame(Game):
         ]
 
     def game_objective_templates(self) -> List[GameObjectiveTemplate]:
+        abyssal_objectives = [
+            GameObjectiveTemplate(
+                label="Reach level LEVEL in SKILL",
+                data={
+                    "SKILL": (self.into_the_abyss_skills, 1),
+                    "LEVEL": (self.early_abyssal_levels, 1),
+                },
+                is_time_consuming=True,
+                is_difficult=False,
+                weight=2,
+            ),
+            GameObjectiveTemplate(
+                label="Reach level LEVEL in SKILL",
+                data={
+                    "SKILL": (self.into_the_abyss_skills, 1),
+                    "LEVEL": (self.late_abyssal_levels, 1),
+                },
+                is_time_consuming=True,
+                is_difficult=False,
+                weight=1,
+            ),
+        ]
         return [
             GameObjectiveTemplate(
                 label="Reach level LEVEL in SKILL",
@@ -62,27 +84,6 @@ class MelvorIdleGame(Game):
                 is_time_consuming=True,
                 is_difficult=False,
                 weight=2,
-            ),
-            
-            GameObjectiveTemplate(
-                label="Reach level LEVEL in SKILL",
-                data={
-                    "SKILL": (self.into_the_abyss_skills, 1),
-                    "LEVEL": (self.early_abyssal_levels, 1),
-                },
-                is_time_consuming=True,
-                is_difficult=False,
-                weight=2,
-            ),
-            GameObjectiveTemplate(
-                label="Reach level LEVEL in SKILL",
-                data={
-                    "SKILL": (self.into_the_abyss_skills, 1),
-                    "LEVEL": (self.late_abyssal_levels, 1),
-                },
-                is_time_consuming=True,
-                is_difficult=False,
-                weight=1,
             ),
             GameObjectiveTemplate(
                 label="Kill NUMBER MONSTER",
@@ -133,7 +134,7 @@ class MelvorIdleGame(Game):
                 is_difficult=True,
                 weight=1,
             ),
-        ]
+        ] + abyssal_objectives if self.has_dlc_into_the_abyss else []
 
     @property
     def dlc_owned(self) -> List[str]:
