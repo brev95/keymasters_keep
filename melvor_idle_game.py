@@ -356,7 +356,7 @@ class MelvorIdleGame(Game):
     def bosses(self) -> List[str]:
         boss_list = self.base_game_bosses()[:]
         if self.has_dlc_atlas_of_discovery:
-            boss_list.extend(self.altas_of_discovery_bosses())
+            boss_list.extend(self.atlas_of_discovery_bosses())
         if self.has_dlc_throne_of_the_herald:
             boss_list.extend(self.throne_of_the_herald_bosses())
         if self.has_dlc_into_the_abyss:
