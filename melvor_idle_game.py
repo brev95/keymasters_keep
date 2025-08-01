@@ -350,7 +350,7 @@ class MelvorIdleGame(Game):
             "Anketh, the Silent Harbinger",
             "Za-Kul, the Tendril Nightmare",
             "Nihlus, the Void Gazer",
-            "Xon, the Abussal King",
+            "Xon, the Abyssal King",
         ]
 
     def bosses(self) -> List[str]:
