@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List
+from typing import List, Callable
 
 from dataclasses import dataclass
 from random import randint
@@ -202,13 +202,13 @@ class MelvorIdleGame(Game):
     def high_numbers() -> range:
         return range(250, 1001, 50)
 
-    def random_range(self) -> range:
+    def random_range(self) -> Callable[[], range]:
         rand = randint(0, 100)
         if rand > 75:
-            return self.low_numbers()
+            return self.low_numbers
         elif rand > 50:
-            return self.medium_numbers()
-        return self.high_numbers()
+            return self.medium_numbers
+        return self.high_numbers
 
     @staticmethod
     def mastery() -> range:
