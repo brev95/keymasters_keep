@@ -259,20 +259,22 @@ class MelvorIdleGame(Game):
             "Cartography",
         ]
 
-    @staticmethod
-    def into_the_abyss_combat_skills() -> List[str]:
+    def into_the_abyss_combat_skills(self) -> List[str]:
         return [
             "Corruption",
+        ] + [
+            f'Abyssal {skill}' for skill in self.base_combat_skills()
         ]
 
-    @staticmethod
-    def into_the_abyss_non_combat_skills() -> List[str]:
+    def into_the_abyss_non_combat_skills(self) -> List[str]:
         return [
             "Harvesting",
+        ] + [
+            f'Abyssal {skill}' for skill in self.base_non_combat_skills()
         ]
 
     def into_the_abyss_skills(self) -> List[str]:
-        return self.into_the_abyss_combat_skills() + self.into_the_abyss_non_combat_skills() + self.base_skills()
+        return self.into_the_abyss_combat_skills() + self.into_the_abyss_non_combat_skills()
 
     def combat_skills(self) -> List[str]:
         skill_list = self.combat_skills()[:]
@@ -281,7 +283,7 @@ class MelvorIdleGame(Game):
         return skill_list
 
     def non_combat_skills(self) -> List[str]:
-        skill_list = self.base_skills()[:]
+        skill_list = self.base_non_combat_skills()[:]
         if self.has_dlc_atlas_of_discovery:
             skill_list.extend(self.atlas_of_discovery_skills())
         if self.has_dlc_into_the_abyss:
