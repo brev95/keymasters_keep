@@ -69,6 +69,26 @@ class AbyssusGame(Game):
                 weight=5,
             ),
             GameObjectiveTemplate(
+                label="Play a depth using WEAPON and ABILITY",
+                data={
+                    "WEAPON": (self.weapons, 1),
+                    "ABILITY": (self.abilities, 1),
+                },
+                is_time_consuming=False,
+                is_difficult=False,
+                weight=5,
+            ),
+            GameObjectiveTemplate(
+                label="Complete a depth using WEAPON and ABILITY",
+                data={
+                    "WEAPON": (self.weapons, 1),
+                    "ABILITY": (self.abilities, 1),
+                },
+                is_time_consuming=True,
+                is_difficult=True,
+                weight=5,
+            ),
+            GameObjectiveTemplate(
                 label="Unlock UPGRADE on the soul wheel",
                 data={
                     "UPGRADE": (self.upgrades, 1),
