@@ -89,7 +89,7 @@ class SplitgateGame(Game):
                 weight=2,
             ),
             GameObjectiveTemplate(
-                label="Get NUMBER melee kills",
+                label="Get KILLS melee kills",
                 data={
                     "KILLS": (self.small_number, 1),
                 },
