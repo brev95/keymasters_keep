@@ -169,24 +169,29 @@ class MelvorIdleGame(Game):
     def dlc_levels() -> List[int]:
         return [110, 120]
 
+    @property
     def levels(self) -> List[int]:
         if self.has_dlc_throne_of_the_herald:
             return self.base_game_levels() + self.dlc_levels()
         return self.base_game_levels()
 
+    @property
     def early_skill_levels(self) -> List[int]:
-        return self.levels()[:4]
+        return self.levels[:4]
 
+    @property
     def late_skill_levels(self) -> List[int]:
-        return self.levels()[4:]
+        return self.levels[4:]
 
     @staticmethod
     def abyssal_levels() -> List[int]:
         return [10, 20, 30, 40, 50, 60]
 
+    @property
     def early_abyssal_levels(self) -> List[int]:
         return self.abyssal_levels()[:2]
 
+    @property
     def late_abyssal_levels(self) -> List[int]:
         return self.abyssal_levels()[2:]
 
@@ -202,13 +207,14 @@ class MelvorIdleGame(Game):
     def high_numbers() -> range:
         return range(250, 1001, 50)
 
-    def random_range(self) -> Callable[[], range]:
+    @property
+    def random_range(self) -> range:
         rand = randint(0, 100)
         if rand > 75:
-            return self.low_numbers
+            return self.low_numbers()
         elif rand > 50:
-            return self.medium_numbers
-        return self.high_numbers
+            return self.medium_numbers()
+        return self.high_numbers()
 
     @staticmethod
     def mastery() -> range:
@@ -249,8 +255,10 @@ class MelvorIdleGame(Game):
             "Woodcutting",
         ]
 
+    @property
     def base_skills(self) -> List[str]:
-        return list(set(self.base_combat_skills() + self.base_non_combat_skills()))
+        # Use list(set(...)) to deduplicate, but we need to sort it to ensure consistent ordering
+        return sorted(list(set(self.base_combat_skills() + self.base_non_combat_skills())))
 
     @staticmethod
     def atlas_of_discovery_skills() -> List[str]:
@@ -259,6 +267,7 @@ class MelvorIdleGame(Game):
             "Cartography",
         ]
 
+    @property
     def into_the_abyss_combat_skills(self) -> List[str]:
         return [
             "Corruption",
@@ -266,6 +275,7 @@ class MelvorIdleGame(Game):
             f'Abyssal {skill}' for skill in self.base_combat_skills()
         ]
 
+    @property
     def into_the_abyss_non_combat_skills(self) -> List[str]:
         return [
             "Harvesting",
@@ -273,29 +283,33 @@ class MelvorIdleGame(Game):
             f'Abyssal {skill}' for skill in self.base_non_combat_skills()
         ]
 
+    @property
     def into_the_abyss_skills(self) -> List[str]:
-        return self.into_the_abyss_combat_skills() + self.into_the_abyss_non_combat_skills()
+        return self.into_the_abyss_combat_skills + self.into_the_abyss_non_combat_skills
 
+    @property
     def combat_skills(self) -> List[str]:
-        skill_list = self.combat_skills()[:]
+        skill_list = self.base_combat_skills()[:]
         if self.has_dlc_into_the_abyss:
-            skill_list.extend(self.into_the_abyss_combat_skills())
+            skill_list.extend(self.into_the_abyss_combat_skills)
         return skill_list
 
+    @property
     def non_combat_skills(self) -> List[str]:
         skill_list = self.base_non_combat_skills()[:]
         if self.has_dlc_atlas_of_discovery:
             skill_list.extend(self.atlas_of_discovery_skills())
         if self.has_dlc_into_the_abyss:
-            skill_list.extend(self.into_the_abyss_non_combat_skills())
+            skill_list.extend(self.into_the_abyss_non_combat_skills)
         return skill_list
 
+    @property
     def skills(self) -> List[str]:
-        skill_list = self.base_skills()[:]
+        skill_list = self.base_skills[:]
         if self.has_dlc_atlas_of_discovery:
             skill_list.extend(self.atlas_of_discovery_skills())
         if self.has_dlc_throne_of_the_herald:
-            skill_list.extend(self.into_the_abyss_skills())
+            skill_list.extend(self.into_the_abyss_skills)
         return skill_list
 
     @staticmethod
@@ -355,14 +369,15 @@ class MelvorIdleGame(Game):
             "Xon, the Abyssal King",
         ]
 
+    @property
     def bosses(self) -> List[str]:
         boss_list = self.base_game_bosses()[:]
         if self.has_dlc_atlas_of_discovery:
-            boss_list.extend(self.atlas_of_discovery_bosses()[:])
+            boss_list.extend(self.atlas_of_discovery_bosses())
         if self.has_dlc_throne_of_the_herald:
-            boss_list.extend(self.throne_of_the_herald_bosses()[:])
+            boss_list.extend(self.throne_of_the_herald_bosses())
         if self.has_dlc_into_the_abyss:
-            boss_list.extend(self.into_the_abyss_bosses()[:])
+            boss_list.extend(self.into_the_abyss_bosses())
         return boss_list
 
     @staticmethod
@@ -428,6 +443,7 @@ class MelvorIdleGame(Game):
             "Stronghold of the Overlords",
         ]
 
+    @property
     def dungeons(self) -> List[str]:
         dungeon_list = self.base_dungeons()[:]
         if self.has_dlc_atlas_of_discovery:
@@ -457,6 +473,7 @@ class MelvorIdleGame(Game):
             "The Final Depth",
         ]
 
+    @property
     def events(self) -> List[str]:
         event_list = self.base_events()[:]
         if self.has_dlc_throne_of_the_herald:
@@ -854,6 +871,7 @@ class MelvorIdleGame(Game):
             "Za-Kul, the Tendril Nightmare",
         ]
 
+    @property
     def monsters(self) -> List[str]:
         monster_list = self.base_monsters()[:]
         if self.has_dlc_atlas_of_discovery:
